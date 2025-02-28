@@ -1,0 +1,6 @@
+.idea
+.venv
+*.pkl
+/images
+/test_images
+__pycache__/
