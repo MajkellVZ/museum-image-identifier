@@ -9,6 +9,8 @@ def main():
 
     finder.save_features("features.pkl")
 
+    print("Features built and stored")
+
 
 if __name__ == "__main__":
     main()

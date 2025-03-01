@@ -1,12 +1,13 @@
-import torch
-from torchvision.models import resnet50, ResNet50_Weights
-from torchvision import transforms
-from PIL import Image
-import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
+import pathlib
 import pickle
 from typing import List, Tuple
-import pathlib
+
+import numpy as np
+import torch
+from PIL import Image
+from sklearn.metrics.pairwise import cosine_similarity
+from torchvision import transforms
+from torchvision.models import ResNet50_Weights, resnet50
 
 
 class ImageSimilarityFinder:
@@ -20,16 +21,20 @@ class ImageSimilarityFinder:
         self.features_dict = {}
         self.model_path = model_path
 
-        self.transform = transforms.Compose([
-            transforms.Resize(256),
-            transforms.CenterCrop(224),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ])
+        self.transform = transforms.Compose(
+            [
+                transforms.Resize(256),
+                transforms.CenterCrop(224),
+                transforms.ToTensor(),
+                transforms.Normalize(
+                    mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
+                ),
+            ]
+        )
 
     def load_and_preprocess_image(self, image_path: str) -> torch.Tensor:
         """Load and preprocess image for ResNet50."""
-        img = Image.open(image_path).convert('RGB')
+        img = Image.open(image_path).convert("RGB")
         img_tensor = self.transform(img).unsqueeze(0).to(self.device)
         return img_tensor
 
@@ -43,23 +48,24 @@ class ImageSimilarityFinder:
 
     def build_features_database(self, images_directory: str) -> None:
         """Build features database from images in directory."""
-        for img_path in pathlib.Path(images_directory).glob('*'):
-            if img_path.suffix.lower() in ['.jpg', '.jpeg', '.png']:
+        for img_path in pathlib.Path(images_directory).glob("*"):
+            if img_path.suffix.lower() in [".jpg", ".jpeg", ".png"]:
                 try:
                     features = self.extract_features(str(img_path))
                     self.features_dict[str(img_path)] = features
                 except Exception as e:
                     print(f"Error processing {img_path}: {e}")
 
-    def find_similar_images(self, query_image_path: str, num_results: int = 5) -> List[Tuple[str, float]]:
+    def find_similar_images(
+        self, query_image_path: str, num_results: int = 5
+    ) -> List[Tuple[str, float]]:
         """Find similar images to query image."""
         query_features = self.extract_features(query_image_path)
 
         similarities = []
         for path, features in self.features_dict.items():
             similarity = cosine_similarity(
-                query_features.reshape(1, -1),
-                features.reshape(1, -1)
+                query_features.reshape(1, -1), features.reshape(1, -1)
             )[0][0]
             similarities.append((path, similarity))
 
@@ -68,10 +74,10 @@ class ImageSimilarityFinder:
 
     def save_features(self, save_path: str) -> None:
         """Save features dictionary to file."""
-        with open(save_path, 'wb') as f:
+        with open(save_path, "wb") as f:
             pickle.dump(self.features_dict, f)
 
     def load_features(self, load_path: str) -> None:
         """Load features dictionary from file."""
-        with open(load_path, 'rb') as f:
+        with open(load_path, "rb") as f:
             self.features_dict = pickle.load(f)

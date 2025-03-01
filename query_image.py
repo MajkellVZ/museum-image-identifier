@@ -4,7 +4,7 @@ from similarity_finder import ImageSimilarityFinder
 def main(file_name: str):
     finder = ImageSimilarityFinder()
 
-    finder.load_features('features.pkl')
+    finder.load_features("features.pkl")
 
     query_image = file_name
     print(f"Finding images similar to {query_image}...")
