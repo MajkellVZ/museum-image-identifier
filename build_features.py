@@ -1,15 +1,18 @@
+from logger import Logger
 from similarity_finder import ImageSimilarityFinder
+
+logger = Logger("feature_builder", log_file="logs/feature_builder.log")
 
 
 def main():
     finder = ImageSimilarityFinder()
 
-    print("Building features database...")
+    logger.info("Building features database...")
     finder.build_features_database("images")
 
     finder.save_features("features.pkl")
 
-    print("Features built and stored")
+    logger.info("Features built and stored")
 
 
 if __name__ == "__main__":

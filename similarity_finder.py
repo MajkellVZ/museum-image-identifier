@@ -9,6 +9,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 from torchvision import transforms
 from torchvision.models import ResNet50_Weights, resnet50
 
+from logger import Logger
+
+logger = Logger("similarity_finder", log_file="logs/similarity_finder.log")
+
 
 class ImageSimilarityFinder:
     def __init__(self, model_path: str = None):
@@ -54,7 +58,7 @@ class ImageSimilarityFinder:
                     features = self.extract_features(str(img_path))
                     self.features_dict[str(img_path)] = features
                 except Exception as e:
-                    print(f"Error processing {img_path}: {e}")
+                    logger.error(f"Error processing {img_path}: {e}")
 
     def find_similar_images(
         self, query_image_path: str, num_results: int = 5
