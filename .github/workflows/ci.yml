@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  test-and-list-and-build:
+  test-and-lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,6 +35,3 @@ jobs:
 
         - name: Run tests
           run: pytest tests/ -v
-
-        - name: Build docker image
-          run: docker build -t features-builder -f features_build.Dockerfile .

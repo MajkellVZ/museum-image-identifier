@@ -8,7 +8,7 @@ def main():
     finder = ImageSimilarityFinder()
 
     logger.info("Building features database...")
-    finder.build_features_database("images")
+    finder.build_features("images")
 
     finder.save_features("features.pkl")
 

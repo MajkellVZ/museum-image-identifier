@@ -51,7 +51,7 @@ def test_extract_features(similarity_finder, test_images_dir):
 
 
 def test_build_features_database(similarity_finder, test_images_dir):
-    similarity_finder.build_features_database(test_images_dir)
+    similarity_finder.build_features(test_images_dir)
 
     assert len(similarity_finder.features_dict) == 3
     for path, features in similarity_finder.features_dict.items():
@@ -60,7 +60,7 @@ def test_build_features_database(similarity_finder, test_images_dir):
 
 
 def test_find_similar_images(similarity_finder, test_images_dir):
-    similarity_finder.build_features_database(test_images_dir)
+    similarity_finder.build_features(test_images_dir)
 
     query_image = str(Path(test_images_dir) / "test_image_0.jpg")
     results = similarity_finder.find_similar_images(query_image, num_results=2)
@@ -71,7 +71,7 @@ def test_find_similar_images(similarity_finder, test_images_dir):
 
 
 def test_save_and_load_features(similarity_finder, test_images_dir, tmp_path):
-    similarity_finder.build_features_database(test_images_dir)
+    similarity_finder.build_features(test_images_dir)
     features_file = tmp_path / "features.pkl"
     similarity_finder.save_features(str(features_file))
 

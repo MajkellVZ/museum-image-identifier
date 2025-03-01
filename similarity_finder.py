@@ -50,7 +50,7 @@ class ImageSimilarityFinder:
         features = features.cpu().numpy().flatten()
         return features
 
-    def build_features_database(self, images_directory: str) -> None:
+    def build_features(self, images_directory: str) -> None:
         """Build features database from images in directory."""
         for img_path in pathlib.Path(images_directory).glob("*"):
             if img_path.suffix.lower() in [".jpg", ".jpeg", ".png"]:
