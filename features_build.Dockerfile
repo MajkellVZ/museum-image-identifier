@@ -12,7 +12,7 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY build_features.py .
-COPY ./similarity_finder.py .
+COPY similarity_finder.py .
+COPY gcp_build_features.py .
 
-CMD ["python", "build_features.py"]
+CMD ["python", "gcp_build_features.py"]
